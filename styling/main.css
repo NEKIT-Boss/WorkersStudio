@@ -1,0 +1,33 @@
+.ggwp
+{
+  color: #333;
+  background-color: rgba(255, 0, 0, 0.0);
+  font-size: 24px;
+  font-weight: 500;
+  font-family: comfortaa;
+}
+
+.avatar{
+  box-shadow: 0 5px 3px alpha(black, 0.5);
+}
+
+#main_frame_title
+{
+  font-family: Comfortaa;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.label_entry
+{
+  color:#222;
+  border: none;
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.0);
+}
+
+.frame_title_text
+{
+  font: comfortaa;
+  font-size: 12px;
+}
