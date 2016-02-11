@@ -11,8 +11,6 @@ GENDER = (
   (True , 'man'),
 )
 
-
-
 def add_worker_photo(worker, file_path):
     shutil.copy2('C:\Users\\rex38\\Desktop\\chart.svg',WORKER_PHOTO_PATH+"\\{}.svg".format(worker.id))
 
@@ -121,11 +119,12 @@ class Worker(BaseModel):
             department = department
         )
     @staticmethod
-    def self_update(this,name , surname , lastname ,post , birthday,hiredate,salary,legalprofit,department):
+    def self_update(this,name , surname , lastname ,post ,gender, birthday,hiredate,salary,legalprofit,department):
         this.name = name
         this.surname = surname
         this.lastname = lastname
         this.post = post
+        this.gender =  gender
         this.birthday = birthday
         this.hiredate = hiredate
         this.salary = salary
