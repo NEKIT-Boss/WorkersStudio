@@ -1,4 +1,5 @@
 {
   "STYLING_DIRECTORY" : "styling",
-  "BUILDER_FILE" :"{}{}ui_2.0.glade"
+  "BUILDER_FILE" :"{1}{0}ui_3.0.glade",
+  "DATABASE_FILE" : ":memory:"
 }

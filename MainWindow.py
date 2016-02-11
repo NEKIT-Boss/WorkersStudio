@@ -1,19 +1,21 @@
 # coding=utf-8
 #!/usr/bin/env python
-import json
-CONFIG = {}
-with open('config.json', 'r') as f:
-    CONFIG = json.load(f)
 import os
-import dbController
-from gi.repository import Gtk
-from MainWindowHandler import MainWindowHandler
+import json
 
-def run():        
+import dbController
+
+from gi.repository import Gtk
+from Config import Config
+
+def run():
+    from MainWindowHandler import MainWindowHandler
+
     builder = Gtk.Builder()
-    builder.add_from_file( CONFIG["BUILDER_FILE"].format(CONFIG["STYLING_DIRECTORY"], os.path.sep))
+    builder.add_from_file( Config["BUILDER_FILE"].format(os.path.sep, Config["STYLING_DIRECTORY"]))
 
     builder.connect_signals(MainWindowHandler(builder))
     builder.get_object("main_window").show_all()
 
+    dbController.init_preview_db()
     Gtk.main()

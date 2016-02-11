@@ -4,22 +4,23 @@
   <requires lib="gtk+" version="3.16"/>
   <!-- interface-local-resource-path images -->
   <!-- interface-css-provider-path main.css -->
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">20</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">КАДНОВА
 АЛИНА ВАЛЕРИЕВНА</property>
   </object>
   <object class="GtkListStore" id="workers_list_store">
     <columns>
+      <!-- column-name Id -->
+      <column type="gint"/>
       <!-- column-name Name -->
       <column type="gchararray"/>
       <!-- column-name Surname -->
       <column type="gchararray"/>
       <!-- column-name LastName -->
+      <column type="gchararray"/>
+      <!-- column-name Post -->
+      <column type="gchararray"/>
+      <!-- column-name Department -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -204,10 +205,12 @@
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <child>
-                  <object class="GtkButton" id="button1">
+                  <object class="GtkButton" id="go_back">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="receives_default">False</property>
+                    <signal name="clicked" handler="prev_view" object="go_forward" swapped="no"/>
                     <child>
                       <object class="GtkArrow" id="arrow1">
                         <property name="visible">True</property>
@@ -223,10 +226,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button2">
+                  <object class="GtkButton" id="go_forward">
+                    <property name="name">go_forward</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="next_view" object="go_back" swapped="no"/>
                     <child>
                       <object class="GtkArrow" id="arrow2">
                         <property name="visible">True</property>
@@ -264,7 +270,7 @@
                   <object class="GtkStackSwitcher" id="stackswitcher1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stack">stack1</property>
+                    <property name="stack">workers_stack</property>
                     <style>
                       <class name="linked"/>
                     </style>
@@ -306,7 +312,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStack" id="menu_stack">
+          <object class="GtkStack" id="main_stack">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="vexpand">True</property>
@@ -679,13 +685,13 @@
                 </child>
               </object>
               <packing>
-                <property name="name">page1</property>
+                <property name="name">main_page</property>
                 <property name="title" translatable="yes">Сотрудники</property>
                 <property name="icon_name">folder-remote</property>
               </packing>
             </child>
             <child>
-              <object class="GtkStack" id="stack1">
+              <object class="GtkStack" id="workers_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -699,11 +705,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkTreeView" id="daun">
+                          <object class="GtkTreeView" id="workers_table">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="model">workers_list_store</property>
                             <property name="search_column">0</property>
+                            <signal name="row-activated" handler="wt_worker_selected" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection"/>
                             </child>
@@ -711,23 +718,13 @@
                               <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                 <property name="title" translatable="yes">Имя</property>
                                 <property name="clickable">True</property>
+                                <property name="alignment">0.5</property>
                                 <property name="reorderable">True</property>
                                 <property name="sort_indicator">True</property>
                                 <property name="sort_order">descending</property>
-                                <property name="sort_column_id">0</property>
+                                <property name="sort_column_id">1</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                <property name="title" translatable="yes">Фамилия</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                   <attributes>
                                     <attribute name="text">1</attribute>
                                   </attributes>
@@ -735,12 +732,66 @@
                               </object>
                             </child>
                             <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                <property name="title" translatable="yes">Фамилия</property>
+                                <property name="clickable">True</property>
+                                <property name="alignment">0.5</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">2</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                                 <property name="title" translatable="yes">Отчество</property>
+                                <property name="clickable">True</property>
+                                <property name="alignment">0.5</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">3</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderertext3"/>
                                   <attributes>
-                                    <attribute name="text">2</attribute>
+                                    <attribute name="text">3</attribute>
+                                    <attribute name="max-width-chars">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                <property name="title" translatable="yes">Пост</property>
+                                <property name="clickable">True</property>
+                                <property name="alignment">0.5</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">4</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext4"/>
+                                  <attributes>
+                                    <attribute name="text">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                                <property name="title" translatable="yes">Место работы</property>
+                                <property name="clickable">True</property>
+                                <property name="alignment">0.5</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">5</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                                  <attributes>
+                                    <attribute name="text">5</attribute>
                                   </attributes>
                                 </child>
                               </object>
@@ -751,7 +802,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="name">all_in_one_page</property>
+                    <property name="name">ws_list_page</property>
                     <property name="title" translatable="yes">Все</property>
                   </packing>
                 </child>
@@ -1414,7 +1465,7 @@
                 </child>
               </object>
               <packing>
-                <property name="name">workers_stack</property>
+                <property name="name">workers_page</property>
                 <property name="title" translatable="yes">page0</property>
                 <property name="position">1</property>
               </packing>
@@ -1436,6 +1487,6 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="stack">menu_stack</property>
+    <property name="stack">main_stack</property>
   </object>
 </interface>
